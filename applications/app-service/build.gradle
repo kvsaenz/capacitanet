@@ -3,7 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     implementation project(':helpers')
     implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
-    implementation project(':dynamo-db')
+    implementation project(':aws-service')
     testImplementation 'org.springframework:spring-web'
     implementation project(':api-rest')
     implementation project(':model')

@@ -1,6 +1,6 @@
-package co.com.capacitanet.dynamodb.serviceUser;
+package co.com.capacitanet.aws.serviceUser;
 
-import co.com.capacitanet.dynamodb.serviceCurso.CursoProcess;
+import co.com.capacitanet.aws.serviceCurso.CursoProcess;
 import co.com.capacitanet.helpers.AuthService;
 import co.com.capacitanet.helpers.Password;
 import co.com.capacitanet.model.usuario.ChangePassword;

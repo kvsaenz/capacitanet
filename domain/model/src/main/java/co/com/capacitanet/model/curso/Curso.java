@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,4 +23,18 @@ public class Curso {
     private boolean active;
     private List<String> tags;
     private List<Recurso> recursos;
+
+    public List<String> getTags() {
+        if (tags == null) {
+            return new ArrayList<>();
+        }
+        return tags;
+    }
+
+    public List<Recurso> getRecursos() {
+        if (recursos == null) {
+            return new ArrayList<>();
+        }
+        return recursos;
+    }
 }
