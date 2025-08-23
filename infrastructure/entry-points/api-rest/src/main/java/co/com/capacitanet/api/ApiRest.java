@@ -1,8 +1,11 @@
 package co.com.capacitanet.api;
 
+import co.com.capacitanet.model.curso.Curso;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
+import co.com.capacitanet.usecase.curso.CursoUseCase;
 import co.com.capacitanet.usecase.usuario.RegistrarUsuarioUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +26,7 @@ public class ApiRest {
 
 
     RegistrarUsuarioUseCase registrarUsuarioUseCase;
+    CursoUseCase cursoUseCase;
 
     @GetMapping(path = "/health")
     public String commandName() {
@@ -47,4 +51,15 @@ public class ApiRest {
         logger.info("Iniciando login para el usuario: {}", usuario.getUsername());
         return registrarUsuarioUseCase.login(usuario);
     }
+
+
+    @PostMapping(path = "/crear-curso")
+    public String crearCurso(@RequestBody Curso curso,
+                             HttpServletRequest request) {
+        logger.info("Iniciando creacion de curso: {}", curso.getTitulo());
+        String userId = (String) request.getAttribute("userId");
+        curso.setCreadorUsername(userId);
+        return cursoUseCase.crearCurso(curso);
+    }
+
 }

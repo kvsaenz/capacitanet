@@ -9,19 +9,21 @@ import java.util.Date;
 
 public class AuthService {
 
+    private final Algorithm algorithm;
     private final JWTVerifier verifier;
 
 
-    public AuthService(JWTVerifier verifier) {
-        this.verifier = verifier;
+    public AuthService() {
+        this.algorithm = Algorithm.HMAC256(System.getenv("SECRET_KEY"));
+        this.verifier = JWT.require(algorithm).build();
     }
 
-    public static String generaJWT(String username) {
+    public String generaJWT(String username) {
         return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600_000)) // 1h
-                .sign(Algorithm.HMAC256(System.getenv("SECRET_KEY")));
+                .sign(this.algorithm);
     }
 
     // Validar token y devolver el JWT decodificado

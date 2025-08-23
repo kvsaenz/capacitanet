@@ -1,4 +1,4 @@
-package co.com.capacitanet.dynamodb.service;
+package co.com.capacitanet.dynamodb.serviceUser;
 
 import co.com.capacitanet.helpers.AuthService;
 import co.com.capacitanet.helpers.Password;
@@ -119,7 +119,7 @@ public class UsersProcess implements UsuarioRepository {
 
                 if (Password.verificar(usuario.getPasswordHash(), storedUser.getPasswordHash())) {
                     logger.info("Login exitoso para el usuario: {}", usuario.getUsername());
-                    return AuthService.generaJWT(usuario.getUsername());
+                    return new AuthService().generaJWT(usuario.getUsername());
                 } else {
                     logger.info("Credenciales incorrectas para el usuario: {}", usuario.getUsername());
                     return "Credenciales incorrectas";

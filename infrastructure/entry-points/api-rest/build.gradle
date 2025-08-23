@@ -2,8 +2,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
     implementation project(':usecase')
     implementation project(':model')
+    implementation project(':helpers')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.auth0:java-jwt:4.5.0'
 }
 
 
