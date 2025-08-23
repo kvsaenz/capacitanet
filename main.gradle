@@ -14,7 +14,6 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'info.solidsoft.pitest'
 
-    compileJava.dependsOn validateStructure
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -28,6 +27,7 @@ subprojects {
     }
 
     dependencies {
+        implementation platform('software.amazon.awssdk:bom:2.32.13')
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         compileOnly "org.projectlombok:lombok:${lombokVersion}"

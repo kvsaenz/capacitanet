@@ -1,14 +1,9 @@
-##Spring Configuration
 server:
-  port: 8080
+  port: 9080
 spring:
   application:
-    name: CapacitaNet
-  devtools:
-    add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: /h2
-  profiles:
-    include:
+    name: "CapacitaNet"
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+AWS_ACCESS_KEY_ID: "your_access_key_id"
+AWS_SECRET_ACCESS_KEY: "your_secret_access_key"

@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':model')
+    implementation project(':helpers')
+    implementation 'org.springframework:spring-context'
+    implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0-rc1'
+    implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
+    testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
+}
