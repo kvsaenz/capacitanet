@@ -9,7 +9,11 @@ public interface UsuarioRepository {
 
     String actualizarUsuario(ChangePassword usuario);
 
+    String perfilUsuario(String userId);
+
     String login(Usuario usuario);
 
     String eliminarUsuario(Usuario usuario);
+
+    String suscribirCurso(String userId, String idCurso);
 }

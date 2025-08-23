@@ -4,7 +4,7 @@ import co.com.capacitanet.model.curso.Curso;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
 import co.com.capacitanet.usecase.curso.CursoUseCase;
-import co.com.capacitanet.usecase.usuario.RegistrarUsuarioUseCase;
+import co.com.capacitanet.usecase.usuario.UsuarioUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +26,7 @@ public class ApiRest {
     private static final String USER_ID = "userId";
 
 
-    RegistrarUsuarioUseCase registrarUsuarioUseCase;
+    UsuarioUseCase usuarioUseCase;
     CursoUseCase cursoUseCase;
 
     @GetMapping(path = "/health")
@@ -38,13 +38,20 @@ public class ApiRest {
     public String registrarUsuario(@RequestBody Usuario usuario) {
         logger.info("Iniciando registro de usuario: {}", usuario.getUsername());
         usuario.setActive(Boolean.TRUE);
-        return registrarUsuarioUseCase.registrarUsuario(usuario);
+        return usuarioUseCase.registrarUsuario(usuario);
     }
 
     @PostMapping(path = "/actualizar-password")
     public String actualizarUsuario(@RequestBody ChangePassword usuario) {
         logger.info("Iniciando actualizacion de password para el usuario: {}", usuario.getUsername());
-        return registrarUsuarioUseCase.actualizarUsuario(usuario);
+        return usuarioUseCase.actualizarUsuario(usuario);
+    }
+
+    @GetMapping(path = "/perfil-usuario")
+    public String perfilUsuario(HttpServletRequest request) {
+        String userId = (String) request.getAttribute(USER_ID);
+        logger.info("Iniciando obtencion de perfil para el usuario: {}", userId);
+        return usuarioUseCase.perfilUsuario(userId);
     }
 
     @PostMapping(path = "/borrar-usuario")
@@ -53,7 +60,7 @@ public class ApiRest {
         logger.info("Iniciando borrado de usuario: {}", usuario.getUsername());
         String userId = (String) request.getAttribute(USER_ID);
         if (userId.equalsIgnoreCase(usuario.getUsername())) {
-            return registrarUsuarioUseCase.eliminarUsuario(usuario);
+            return usuarioUseCase.eliminarUsuario(usuario);
         } else {
             return "Cambios no autorizados";
         }
@@ -62,7 +69,7 @@ public class ApiRest {
     @PostMapping(path = "/login")
     public String login(@RequestBody Usuario usuario) {
         logger.info("Iniciando login para el usuario: {}", usuario.getUsername());
-        return registrarUsuarioUseCase.login(usuario);
+        return usuarioUseCase.login(usuario);
     }
 
 
@@ -73,6 +80,15 @@ public class ApiRest {
         String userId = (String) request.getAttribute(USER_ID);
         curso.setCreadorUsername(userId);
         return cursoUseCase.crearCurso(curso);
+    }
+
+    @PostMapping(path = "/suscribirme-curso")
+    public String suscribirmeCurso(@RequestBody Curso curso,
+                                   HttpServletRequest request) {
+        logger.info("Iniciando suscripcion a curso: {}", curso.getCursoId());
+        String userId = (String) request.getAttribute(USER_ID);
+
+        return usuarioUseCase.suscribirCurso(userId, curso.getCursoId());
     }
 
     @GetMapping(path = "/obtener-cursos")

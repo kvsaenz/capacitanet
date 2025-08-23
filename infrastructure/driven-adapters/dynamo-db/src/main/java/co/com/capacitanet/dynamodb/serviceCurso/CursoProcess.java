@@ -89,4 +89,20 @@ public class CursoProcess implements CursoRepository {
             return "Error al registrar el curso";
         }
     }
+
+
+    public Curso obtenerCursoPorId(String cursoId) {
+        Map<String, AttributeValue> key = new HashMap<>();
+        key.put(CLAVE, AttributeValue.builder().s(cursoId).build());
+        var response = client.getItem(builder -> builder.tableName(TABLE_NAME).key(key));
+        if (response.hasItem()) {
+            String json = response.item().get(DATOS).s();
+            try {
+                return new ObjectMapper().readValue(json, Curso.class);
+            } catch (Exception e) {
+                logger.error("Error al convertir el JSON a Curso: {}", e.getMessage());
+            }
+        }
+        return null;
+    }
 }

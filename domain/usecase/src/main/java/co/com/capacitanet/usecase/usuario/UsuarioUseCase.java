@@ -6,7 +6,7 @@ import co.com.capacitanet.model.usuario.gateways.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RegistrarUsuarioUseCase {
+public class UsuarioUseCase {
 
     private final UsuarioRepository usuarioRepository;
 
@@ -36,7 +36,15 @@ public class RegistrarUsuarioUseCase {
         }
     }
 
+    public String perfilUsuario(String userId) {
+        return usuarioRepository.perfilUsuario(userId);
+    }
+
     public String login(Usuario usuario) {
         return usuarioRepository.login(usuario);
+    }
+
+    public String suscribirCurso(String userId, String idCurso) {
+        return usuarioRepository.suscribirCurso(userId, idCurso);
     }
 }

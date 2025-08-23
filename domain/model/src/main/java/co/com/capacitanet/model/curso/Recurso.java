@@ -12,7 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Recurso {
+    private String id;
     private int order;
+    private boolean visualizado;
     private String tipo;
     private String nombre;
     private String s3Key;
