@@ -23,7 +23,7 @@ public class RegistrarUsuarioUseCase {
         if (token.split("\\.").length == 3) {
             return usuarioRepository.actualizarUsuario(usuario);
         } else {
-            return "Usuario no registrado";
+            return "Cambios no autorizados";
         }
     }
 

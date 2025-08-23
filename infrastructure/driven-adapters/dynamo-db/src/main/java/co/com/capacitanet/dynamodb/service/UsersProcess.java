@@ -7,6 +7,8 @@ import co.com.capacitanet.model.usuario.Usuario;
 import co.com.capacitanet.model.usuario.gateways.UsuarioRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -19,6 +21,9 @@ import java.util.Map;
 
 @Component
 public class UsersProcess implements UsuarioRepository {
+
+    private static final Logger logger = LogManager.getLogger(UsersProcess.class);
+
 
     private static final String USERNAME = "username";
     private static final String PERFIL = "perfil";
@@ -49,12 +54,16 @@ public class UsersProcess implements UsuarioRepository {
                     .build();
 
             client.putItem(request);
+            logger.info("Usuario registrado: {}", usuario.getUsername());
             return "Usuario registrado exitosamente";
         } catch (JsonProcessingException e) {
+            logger.error("Error al procesar los datos del usuario: {}", e.getMessage());
             return "Usuario no registrado";
         } catch (ConditionalCheckFailedException e) {
+            logger.error("El usuario ya existe: {}", usuario.getUsername());
             return "Usuario ya existe";
         } catch (Exception e) {
+            logger.error("Error al registrar el usuario: {}", e.getMessage());
             return "Usuario no registrado satisfactoriamente";
         }
     }
@@ -84,12 +93,14 @@ public class UsersProcess implements UsuarioRepository {
                         .build();
 
                 client.updateItem(request);
+                logger.info("Contraseña actualizada para el usuario: {}", usuario.getUsername());
                 return "Contraseña actualizada exitosamente";
-
             } else {
+                logger.info("Usuario no existe para actualizar: {}", usuario.getUsername());
                 return "Usuario no exite";
             }
         } catch (Exception e) {
+            logger.error("Error al actualizar la contraseña: {}", e.getMessage());
             return "Error al actualizar la contraseña";
         }
     }
@@ -107,16 +118,21 @@ public class UsersProcess implements UsuarioRepository {
                 Usuario storedUser = mapper.readValue(jsonData, Usuario.class);
 
                 if (Password.verificar(usuario.getPasswordHash(), storedUser.getPasswordHash())) {
+                    logger.info("Login exitoso para el usuario: {}", usuario.getUsername());
                     return AuthService.generaJWT(usuario.getUsername());
                 } else {
+                    logger.info("Credenciales incorrectas para el usuario: {}", usuario.getUsername());
                     return "Credenciales incorrectas";
                 }
             } else {
+                logger.info("Usuario no existe: {}", usuario.getUsername());
                 return "Usuario no exite";
             }
         } catch (JsonProcessingException e) {
+            logger.error("Error al procesar los datos en login del usuario: {}", e.getMessage());
             return "Error al procesar los datos del usuario";
         } catch (Exception e) {
+            logger.error("Error en el proceso de login: {}", e.getMessage());
             return "Error en el proceso de login";
         }
     }

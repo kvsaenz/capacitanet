@@ -66,7 +66,6 @@ subprojects {
             html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
         }
     }
-
 }
 
 jacoco {
