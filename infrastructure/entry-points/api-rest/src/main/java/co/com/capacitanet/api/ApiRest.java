@@ -65,7 +65,6 @@ public class ApiRest {
         return registrarUsuarioUseCase.login(usuario);
     }
 
-
     @PostMapping(path = "/crear-curso")
     public String crearCurso(@RequestBody Curso curso,
                              HttpServletRequest request) {
