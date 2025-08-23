@@ -41,7 +41,7 @@ public class UsersProcess implements UsuarioRepository {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            usuario.setPasswordHash(Password.hash(usuario.getPasswordHash()));
+            usuario.setPassword(Password.hash(usuario.getPassword()));
             String json = mapper.writeValueAsString(usuario);
             Map<String, AttributeValue> item = new HashMap<>();
             item.put(USERNAME, AttributeValue.builder().s(usuario.getUsername()).build());
@@ -79,7 +79,7 @@ public class UsersProcess implements UsuarioRepository {
                 String jsonData = response.item().get(PERFIL).s();
                 ObjectMapper mapper = new ObjectMapper();
                 Usuario storedUser = mapper.readValue(jsonData, Usuario.class);
-                storedUser.setPasswordHash(Password.hash(usuario.getPasswordHashNew()));
+                storedUser.setPassword(Password.hash(usuario.getPasswordNew()));
 
                 String json = mapper.writeValueAsString(storedUser);
 
@@ -117,12 +117,17 @@ public class UsersProcess implements UsuarioRepository {
                 ObjectMapper mapper = new ObjectMapper();
                 Usuario storedUser = mapper.readValue(jsonData, Usuario.class);
 
-                if (Password.verificar(usuario.getPasswordHash(), storedUser.getPasswordHash())) {
-                    logger.info("Login exitoso para el usuario: {}", usuario.getUsername());
-                    return new AuthService().generaJWT(usuario.getUsername());
+                if (storedUser.isActive()) {
+                    if (Password.verificar(usuario.getPassword(), storedUser.getPassword())) {
+                        logger.info("Login exitoso para el usuario: {}", usuario.getUsername());
+                        return new AuthService().generaJWT(usuario.getUsername());
+                    } else {
+                        logger.info("Credenciales incorrectas para el usuario: {}", usuario.getUsername());
+                        return "Credenciales incorrectas";
+                    }
                 } else {
-                    logger.info("Credenciales incorrectas para el usuario: {}", usuario.getUsername());
-                    return "Credenciales incorrectas";
+                    logger.info("Usuario inactivo: {}", usuario.getUsername());
+                    return "Usuario inactivo";
                 }
             } else {
                 logger.info("Usuario no existe: {}", usuario.getUsername());
@@ -134,6 +139,43 @@ public class UsersProcess implements UsuarioRepository {
         } catch (Exception e) {
             logger.error("Error en el proceso de login: {}", e.getMessage());
             return "Error en el proceso de login";
+        }
+    }
+
+    @Override
+    public String eliminarUsuario(Usuario usuario) {
+        try {
+            Map<String, AttributeValue> key = new HashMap<>();
+            key.put(USERNAME, AttributeValue.builder().s(usuario.getUsername()).build());
+
+            var response = client.getItem(builder -> builder.tableName(TABLE_NAME).key(key));
+            if (response.hasItem()) {
+                String jsonData = response.item().get(PERFIL).s();
+                ObjectMapper mapper = new ObjectMapper();
+                Usuario storedUser = mapper.readValue(jsonData, Usuario.class);
+                storedUser.setActive(false);
+
+                String json = mapper.writeValueAsString(storedUser);
+
+                UpdateItemRequest request = UpdateItemRequest.builder()
+                        .tableName(TABLE_NAME)
+                        .key(key)
+                        .updateExpression("SET perfil = :perfil")
+                        .expressionAttributeValues(Map.of(
+                                ":perfil", AttributeValue.builder().s(json).build()
+                        ))
+                        .build();
+
+                client.updateItem(request);
+                logger.info("Usuario desactivado: {}", usuario.getUsername());
+                return "Usuario desactivado exitosamente";
+            } else {
+                logger.info("Usuario no existe para eliminar: {}", usuario.getUsername());
+                return "Usuario no exite";
+            }
+        } catch (Exception e) {
+            logger.error("Error al eliminar el usuario: {}", e.getMessage());
+            return "Error al eliminar el usuario";
         }
     }
 }

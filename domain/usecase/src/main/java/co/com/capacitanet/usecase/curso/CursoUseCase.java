@@ -14,4 +14,8 @@ public class CursoUseCase {
         return cursoRepository.crearCurso(curso);
     }
 
+    public String obtenerCursos(String userId) {
+        return cursoRepository.obtenerCursos(userId);
+    }
+
 }

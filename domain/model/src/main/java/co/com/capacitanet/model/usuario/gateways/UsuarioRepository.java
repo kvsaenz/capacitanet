@@ -10,4 +10,6 @@ public interface UsuarioRepository {
     String actualizarUsuario(ChangePassword usuario);
 
     String login(Usuario usuario);
+
+    String eliminarUsuario(Usuario usuario);
 }

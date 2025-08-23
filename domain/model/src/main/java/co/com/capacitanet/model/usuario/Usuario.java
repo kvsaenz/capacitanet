@@ -18,7 +18,8 @@ public class Usuario {
     private String username;
     private String nombre;
     private String apellido;
-    private String passwordHash;
+    private String password;
+    private boolean active;
     private List<String> cursos;
     private List<String> insignias;
 

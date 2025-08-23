@@ -16,7 +16,8 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static String PATH_APP = "/capacitanet";
+    private static final String PATH_APP = "/capacitanet";
+    private static final String ENCODING = "UTF-8";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -35,8 +36,8 @@ public class JwtFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setCharacterEncoding(ENCODING);
             response.getWriter().write("Autorización requerida");
-            response.setCharacterEncoding("UTF-8");
             return;
         }
 
@@ -48,11 +49,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch (TokenExpiredException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setCharacterEncoding(ENCODING);
             response.getWriter().write("Token expirado");
-            response.setCharacterEncoding("UTF-8");
         } catch (JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding(ENCODING);
             response.getWriter().write("Token inválido");
         }
     }

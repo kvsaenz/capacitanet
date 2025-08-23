@@ -15,7 +15,7 @@ import lombok.Setter;
 public class ChangePassword {
 
     private String username;
-    private String passwordHash;
-    private String passwordHashNew;
+    private String password;
+    private String passwordNew;
 
 }
