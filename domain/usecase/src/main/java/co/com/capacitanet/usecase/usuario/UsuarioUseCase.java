@@ -1,5 +1,6 @@
 package co.com.capacitanet.usecase.usuario;
 
+import co.com.capacitanet.model.curso.VerModulo;
 import co.com.capacitanet.model.response.ResponseApp;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
@@ -18,10 +19,27 @@ public class UsuarioUseCase {
 
 
     public ResponseApp registrarUsuario(Usuario usuario) {
-        if (!ALLOWED_DOMAINS.stream().anyMatch(usuario.getUsername()::endsWith)) {
-            return ResponseApp.builder().status(401)
-                    .messaje("El correo ingresado no pertenece al dominio corporativo.").build();
+        if (usuario.getUsername() == null || usuario.getUsername().trim().isEmpty()) {
+            return ResponseApp.builder().status(400)
+                    .message("El username es obligatorio").build();
         }
+        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
+            return ResponseApp.builder().status(400)
+                    .message("El nombre es obligatorio").build();
+        }
+        if (usuario.getApellido() == null || usuario.getApellido().trim().isEmpty()) {
+            return ResponseApp.builder().status(400)
+                    .message("El apellido es obligatorio").build();
+        }
+        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+            return ResponseApp.builder().status(400)
+                    .message("La contraseña es obligatoria").build();
+        }
+        if (ALLOWED_DOMAINS.stream().noneMatch(usuario.getUsername()::endsWith)) {
+            return ResponseApp.builder().status(400)
+                    .message("El correo ingresado no pertenece al dominio corporativo.").build();
+        }
+
 
         return usuarioRepository.registrarUsuario(usuario);
     }
@@ -32,19 +50,19 @@ public class UsuarioUseCase {
                 .password(usuario.getPassword())
                 .build();
         ResponseApp token = usuarioRepository.login(usuario1);
-        if (token.getMessaje().split("\\.").length == 3) {
+        if (token.getMessage().split("\\.").length == 3) {
             return usuarioRepository.actualizarUsuario(usuario);
         } else {
-            return ResponseApp.builder().status(401).messaje("Cambios no autorizados").build();
+            return ResponseApp.builder().status(401).message("Cambios no autorizados").build();
         }
     }
 
     public ResponseApp eliminarUsuario(Usuario usuario) {
         ResponseApp token = usuarioRepository.login(usuario);
-        if (token.getMessaje().split("\\.").length == 3) {
+        if (token.getMessage().split("\\.").length == 3) {
             return usuarioRepository.eliminarUsuario(usuario);
         } else {
-            return ResponseApp.builder().status(401).messaje("Cambios no autorizados").build();
+            return ResponseApp.builder().status(401).message("Cambios no autorizados").build();
         }
     }
 
@@ -58,5 +76,9 @@ public class UsuarioUseCase {
 
     public ResponseApp suscribirCurso(String userId, String idCurso) {
         return usuarioRepository.suscribirCurso(userId, idCurso);
+    }
+
+    public ResponseApp verModulo(String userId, VerModulo verModulo) {
+        return usuarioRepository.verModulo(userId, verModulo);
     }
 }

@@ -1,0 +1,495 @@
+type: collection.insomnia.rest/5.0
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1755282244209
+  modified: 1755282244209
+  description: ""
+collection:
+  - name: CapacitaNet
+    meta:
+      id: fld_a9ea1678feda4fc78e9c34967b6a4df4
+      created: 1755907706998
+      modified: 1755907706998
+      sortKey: -1755907706998
+      description: ""
+    children:
+      - url: http://localhost:9080/capacitanet/health
+        name: health
+        meta:
+          id: req_a46cfb3eb26c4a17b865c82f0be6cf56
+          created: 1755907729395
+          modified: 1756045597853
+          isPrivate: false
+          description: ""
+          sortKey: -1755907729395
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.4.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/registrar-usuario
+        name: registrar-usuario
+        meta:
+          id: req_6ed95ec47a9d46889cd5970c747669b6
+          created: 1755908467049
+          modified: 1756061327411
+          isPrivate: false
+          description: ""
+          sortKey: -1755595003752
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "username": "2@bancodebogota.com.co",
+            	"nombre": "Pepito",
+            	"apellido" : "Rodriguez",
+              "password": "holaMundo"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.4.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/login
+        name: login
+        meta:
+          id: req_fbee3804f666433b8dac68c2ea71b6bd
+          created: 1755914762992
+          modified: 1756076708195
+          isPrivate: false
+          description: ""
+          sortKey: -1755438640930.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"username": "5@bancodebogota.com.co",
+            	"password": "holamundo"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.4.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/actualizar-password
+        name: actualizar-password
+        meta:
+          id: req_090386ec54c0479d924d961616c9746f
+          created: 1755960009783
+          modified: 1756061522067
+          isPrivate: false
+          description: ""
+          sortKey: -1755360459519.75
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "username": "1@bancodebogota.com.co",
+              "password": "holaMundo",
+            	"passwordNew": "holaMundo"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_ceefa632658c494f90a70754f293a81a
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_bbb34bc6502b4e58af28941aff6a741d
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/crear-curso
+        name: crear-curso
+        meta:
+          id: req_468cdb52a10840ebb1650ed771a1ba74
+          created: 1755967363251
+          modified: 1756067972170
+          isPrivate: false
+          description: ""
+          sortKey: -1755321368814.375
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cursoId": "curso2",
+              "titulo": "Introducción a Ts",
+              "descripcion": "Curso básico de Java",
+            	"tags": ["AI"]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/obtener-cursos
+        name: obtener-curso
+        meta:
+          id: req_556832b77a3b4621a88e9e99a538d2ef
+          created: 1755974037292
+          modified: 1756067564408
+          isPrivate: false
+          description: ""
+          sortKey: -1755301823461.6875
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/borrar-usuario
+        name: borrar-usuario
+        meta:
+          id: req_4cc478038b9d4227898e2afba94f9f71
+          created: 1755976599828
+          modified: 1756067589161
+          isPrivate: false
+          description: ""
+          sortKey: -1755516822341.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "username": "2@bancodebogota.com.co",
+              "password": "holaMundo"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_434584ca669d47b19efcb2782c6bd96c
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_990a51dc45dc416a9d0791f2657f5a9d
+          - id: pair_76d62e0d4ad540dca4cdd1cd7c703335
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/suscribirme-curso
+        name: suscribir-curso
+        meta:
+          id: req_08b8e6e4ed2f4a8ebb89b8f00a400a4b
+          created: 1755981223286
+          modified: 1756071160159
+          isPrivate: false
+          description: ""
+          sortKey: -1755311596138.0312
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cursoId": "curso2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/perfil-usuario
+        name: perfil-usuario
+        meta:
+          id: req_75743085edcb41fcbdfba04824e55dc8
+          created: 1755983221826
+          modified: 1756067567267
+          isPrivate: false
+          description: ""
+          sortKey: -1755306709799.8594
+        method: GET
+        body:
+          mimeType: application/json
+          text: "11990"
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/cursos/curso2/recursos
+        name: subir-recursos
+        meta:
+          id: req_91d9cf81af2549e189a0dfff7478539a
+          created: 1755984082613
+          modified: 1756068030015
+          isPrivate: false
+          description: ""
+          sortKey: -1755309152968.9453
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - id: pair_35ab4e158a7e4565ae162d98aaeb5521
+              name: file
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: C:\Users\User\Downloads\KAROL G, Manu Chao - Viajando Por El Mundo
+                (Visualizer).mp4
+            - id: pair_132df87d44dc4b0993a67938a3199e3a
+              name: order
+              value: "2"
+              description: ""
+              disabled: false
+              type: text
+              multiline: false
+            - id: pair_bb27a38a8f8a4a1b97a0e8080db11c1b
+              name: tipo
+              value: mp4
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+            id: pair_b2e96b155d834c50a882e77c81ad1fae
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/activar-curso
+        name: activar-curso
+        meta:
+          id: req_4e0acd97f9e04f6680f5682ba8aea6c1
+          created: 1756047322428
+          modified: 1756068042782
+          isPrivate: false
+          description: ""
+          sortKey: -1755316482476.2031
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cursoId": "curso2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/ver-modulo
+        name: ver-modulo
+        meta:
+          id: req_bb2469a71032463db6ffccea951f29ad
+          created: 1756073315790
+          modified: 1756074563807
+          isPrivate: false
+          description: ""
+          sortKey: -1755307931384.4023
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cursoId": "curso2",
+            	"recursoId": "ade93d7e-7fd2-48cc-a6fd-67e90ab9c70d"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'when-expired', 600 %}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:9080/capacitanet/obtener-cursos-pendientes
+        name: obtener-cursos-pendientes
+        meta:
+          id: req_9070a605ecea445c904c0aa11be175f2
+          created: 1756076425563
+          modified: 1756076659439
+          isPrivate: false
+          description: ""
+          sortKey: -1755292050785.3438
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+            id: pair_dad5d9fa2b9942f6b7ed4438b7e292a9
+          - name: User-Agent
+            value: insomnia/11.4.0
+            id: pair_f6fa8e7819a746f8a3f816b9a9f2972d
+          - id: pair_b7f7c77c92af4642b369b70b997bed8c
+            name: Authorization
+            value: Bearer {% response 'body', 'req_fbee3804f666433b8dac68c2ea71b6bd',
+              'b64::JC5tZXNzYWdl::46b', 'always', 600 %}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1755282255807
+    modified: 1755282255807
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1755282255722
+    modified: 1755282255722
+    isPrivate: false

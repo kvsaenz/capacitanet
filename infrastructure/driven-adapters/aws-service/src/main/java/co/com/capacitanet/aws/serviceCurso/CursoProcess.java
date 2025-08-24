@@ -52,7 +52,7 @@ public class CursoProcess implements CursoRepository {
 
 
     @Override
-    public ResponseApp obtenerCursos(String userId) {
+    public ResponseApp obtenerCursos(String userId, boolean estado) {
         ScanRequest request = ScanRequest.builder()
                 .tableName(TABLE_NAME)
                 .build();
@@ -64,23 +64,30 @@ public class CursoProcess implements CursoRepository {
             String json = item.get(DATOS).s();
             try {
                 Curso curso = new ObjectMapper().readValue(json, Curso.class);
-                if (curso.isActive()) {
+                if (curso.isActive() == estado) {
                     for (Recurso rec : curso.getRecursos()) {
                         String url = generarS3Url(rec.getS3Key());
                         rec.setS3Key(url);
                     }
-                    cursos.add(curso);
+                    if (estado) {
+                        cursos.add(curso);
+                    } else {
+                        if (curso.getCreadorUsername().equalsIgnoreCase(userId)) {
+                            cursos.add(curso);
+                        }
+                    }
+
                 }
 
             } catch (Exception e) {
                 logger.error("Error al convertir el JSON a Curso: {}", e.getMessage());
-                return ResponseApp.builder().status(500).messaje("Error al convertir el JSON a Curso").build();
+                return ResponseApp.builder().status(500).message("Error al convertir el JSON a Curso").build();
             }
         }
         try {
-            return ResponseApp.builder().status(200).messaje(mapper.writeValueAsString(cursos)).build();
+            return ResponseApp.builder().status(200).message(mapper.writeValueAsString(cursos)).build();
         } catch (JsonProcessingException e) {
-            return ResponseApp.builder().status(500).messaje("Error al convertir los cursos a JSON").build();
+            return ResponseApp.builder().status(500).message("Error al convertir los cursos a JSON").build();
         }
     }
 
@@ -100,16 +107,16 @@ public class CursoProcess implements CursoRepository {
 
             client.putItem(request);
             logger.info("Curso registrado exitosamente: {}", curso.getCursoId());
-            return ResponseApp.builder().status(200).messaje("Curso registrado satisfactoriamente").build();
+            return ResponseApp.builder().status(200).message("Curso registrado satisfactoriamente").build();
         } catch (JsonProcessingException e) {
             logger.error("Error al convertir un curso a JSON: {}", e.getMessage());
-            return ResponseApp.builder().status(500).messaje("Error en el formato del curso").build();
+            return ResponseApp.builder().status(500).message("Error en el formato del curso").build();
         } catch (ConditionalCheckFailedException e) {
             logger.error("El curso ya existe: {}", e.getMessage());
-            return ResponseApp.builder().status(500).messaje("El curso ya está registrado").build();
+            return ResponseApp.builder().status(200).message("El curso ya está registrado").build();
         } catch (Exception e) {
             logger.error("Error al registrar el curso: {}", e.getMessage());
-            return ResponseApp.builder().status(500).messaje("Error al registrar el curso").build();
+            return ResponseApp.builder().status(500).message("Error al registrar el curso").build();
         }
     }
 
@@ -145,17 +152,17 @@ public class CursoProcess implements CursoRepository {
 
                 client.updateItem(request);
                 logger.info("Recurso agregado al curso: {}", cursoId);
-                return ResponseApp.builder().status(200).messaje("Recurso agregado satisfactoriamente").build();
+                return ResponseApp.builder().status(200).message("Recurso agregado satisfactoriamente").build();
             } else {
                 logger.error("Curso no encontrado: {}", cursoId);
-                return ResponseApp.builder().status(404).messaje("Curso no encontrado").build();
+                return ResponseApp.builder().status(404).message("Curso no encontrado").build();
             }
         } catch (JsonProcessingException e) {
             logger.error("Error al convertir el curso a JSON: {}", e.getMessage());
-            return ResponseApp.builder().status(500).messaje("Error en el formato del curso").build();
+            return ResponseApp.builder().status(500).message("Error en el formato del curso").build();
         } catch (Exception e) {
             logger.error("Error al agregar el recurso: {}", e.getMessage());
-            return ResponseApp.builder().status(500).messaje("Error al agregar el recurso").build();
+            return ResponseApp.builder().status(500).message("Error al agregar el recurso").build();
         }
     }
 
@@ -170,7 +177,7 @@ public class CursoProcess implements CursoRepository {
                 String jsonData = response.item().get(DATOS).s();
                 Curso cursoDB = mapper.readValue(jsonData, Curso.class);
                 if (!cursoDB.getCreadorUsername().equalsIgnoreCase(userId)) {
-                    return ResponseApp.builder().status(401).messaje("Cambios no autorizados").build();
+                    return ResponseApp.builder().status(401).message("Cambios no autorizados").build();
                 }
                 cursoDB.setActive(!cursoDB.isActive());
                 String json = mapper.writeValueAsString(cursoDB);
@@ -186,22 +193,17 @@ public class CursoProcess implements CursoRepository {
 
                 client.updateItem(request);
                 logger.info("Curso activado: {}", cursoId);
-                return ResponseApp.builder().status(200).messaje("Curso activado satisfactoriamente").build();
+                return ResponseApp.builder().status(200).message("Curso activado satisfactoriamente").build();
 
             } else {
                 logger.error("Curso no encontrado para activar: {}", cursoId);
-                return ResponseApp.builder().status(404).messaje("Curso no encontrado").build();
+                return ResponseApp.builder().status(404).message("Curso no encontrado").build();
             }
         } catch (Exception e) {
             logger.error("Error al activar el recurso: {}", e.getMessage());
-            return ResponseApp.builder().status(500).messaje("Error al activar el curso").build();
+            return ResponseApp.builder().status(500).message("Error al activar el curso").build();
         }
     }
-
-
-
-
-
 
     private String generarS3Url(String key) {
         try {

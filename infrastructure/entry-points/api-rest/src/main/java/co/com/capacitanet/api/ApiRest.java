@@ -2,6 +2,7 @@ package co.com.capacitanet.api;
 
 import co.com.capacitanet.model.curso.Curso;
 import co.com.capacitanet.model.curso.Recurso;
+import co.com.capacitanet.model.curso.VerModulo;
 import co.com.capacitanet.model.response.ResponseApp;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
@@ -47,7 +48,7 @@ public class ApiRest {
      */
     @GetMapping(path = "/health", produces = "application/json")
     public ResponseEntity<ResponseApp> commandName() {
-        return ResponseEntity.status(200).body(ResponseApp.builder().status(200).messaje("Healt Check CapacitaNet").build());
+        return ResponseEntity.status(200).body(ResponseApp.builder().status(200).message("Healt Check CapacitaNet").build());
     }
 
     /**
@@ -88,7 +89,7 @@ public class ApiRest {
         String userId = (String) request.getAttribute(USER_ID);
         logger.info("Iniciando obtencion de perfil para el usuario: {}", userId);
         ResponseApp response = usuarioUseCase.perfilUsuario(userId);
-        return ResponseEntity.status(response.getStatus()).body(response.getMessaje());
+        return ResponseEntity.status(response.getStatus()).body(response.getMessage());
     }
 
     /**
@@ -108,7 +109,7 @@ public class ApiRest {
             return ResponseEntity.status(response.getStatus()).body(response);
         } else {
             return ResponseEntity.status(401).body(ResponseApp.builder()
-                    .status(401).messaje("Cambios no autorizados").build());
+                    .status(401).message("Cambios no autorizados").build());
         }
     }
 
@@ -169,8 +170,16 @@ public class ApiRest {
     public ResponseEntity<Object> obtenerCurso(HttpServletRequest request) {
         logger.info("Iniciando obtencion de cursos");
         String userId = (String) request.getAttribute(USER_ID);
-        ResponseApp response = cursoUseCase.obtenerCursos(userId);
-        return ResponseEntity.status(response.getStatus()).body(response.getMessaje());
+        ResponseApp response = cursoUseCase.obtenerCursos(userId, true);
+        return ResponseEntity.status(response.getStatus()).body(response.getMessage());
+    }
+
+    @GetMapping(path = "/obtener-cursos-pendientes", produces = "application/json")
+    public ResponseEntity<Object> obtenerCursoFalse(HttpServletRequest request) {
+        logger.info("Iniciando obtencion de cursos pendientes");
+        String userId = (String) request.getAttribute(USER_ID);
+        ResponseApp response = cursoUseCase.obtenerCursos(userId, false);
+        return ResponseEntity.status(response.getStatus()).body(response.getMessage());
     }
 
     /**
@@ -207,8 +216,19 @@ public class ApiRest {
             @RequestParam("tipo") String tipo) throws IOException {
 
         // Crear un archivo temporal para almacenar el contenido del MultipartFile
-        File temp = File.createTempFile("temp", file.getOriginalFilename());
+        File temp = File.createTempFile("capacitaNet_", file.getOriginalFilename());
         file.transferTo(temp);
+
+        String originalName = file.getOriginalFilename();
+        if (originalName != null &&
+                !(originalName.endsWith(".pdf") ||
+                        originalName.endsWith(".pptx") ||
+                        originalName.endsWith(".docx") ||
+                        originalName.endsWith(".mp4"))) {
+
+            return ResponseEntity.status(400).body(ResponseApp.builder()
+                    .status(400).message("Formato de archivo no soportado").build());
+        }
 
         // Construir el objeto Recurso y agregarlo al curso
         cursoUseCase.agregarRecurso(cursoId, Recurso.builder()
@@ -220,6 +240,15 @@ public class ApiRest {
                 .build(), temp);
 
         return ResponseEntity.status(200).body(ResponseApp
-                .builder().status(200).messaje("Recurso agregado al curso " + cursoId).build());
+                .builder().status(200).message("Recurso agregado al curso " + cursoId).build());
+    }
+
+    @PostMapping(path = "/ver-modulo", produces = "application/json")
+    public ResponseEntity<ResponseApp> visualizarModCurso(@RequestBody VerModulo verModulo,
+                                                          HttpServletRequest request) {
+        logger.info("Iniciando visualizacion del curso: {}", verModulo);
+        String userId = (String) request.getAttribute(USER_ID);
+        ResponseApp response = usuarioUseCase.verModulo(userId, verModulo);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 }

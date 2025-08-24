@@ -1,4 +1,4 @@
-package co.com.capacitanet.model.response;
+package co.com.capacitanet.model.curso;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ResponseApp {
+public class VerModulo {
 
-    private int status;
-    private String message;
-
+    private String cursoId;
+    private String recursoId;
 }

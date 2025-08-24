@@ -11,9 +11,10 @@ public interface CursoRepository {
 
     ResponseApp crearCurso(Curso curso);
 
-    ResponseApp obtenerCursos(String userId);
+    ResponseApp obtenerCursos(String userId, boolean estado);
 
     ResponseApp agregarRecurso(String cursoId, Recurso recurso, File file);
 
     ResponseApp activarCurso(String cursoId, String userId);
+
 }
