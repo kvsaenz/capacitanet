@@ -60,12 +60,12 @@ public class UsersProcess implements UsuarioRepository {
 
             client.putItem(request);
             logger.info("Usuario registrado: {}", usuario.getUsername());
-            return ResponseApp.builder().status(200).messaje("Usuario registrado exitosamente").build();
+            return ResponseApp.builder().status(200).messaje("Registro exitoso").build();
         } catch (JsonProcessingException e) {
             return ResponseApp.builder().status(500).messaje("Usuario no registrado").build();
         } catch (ConditionalCheckFailedException e) {
-            logger.error("El usuario ya existe: {}", usuario.getUsername());
-            return ResponseApp.builder().status(500).messaje("Usuario ya existe").build();
+            logger.error("El usuario o correo ya está registrado en el sistema. {}", usuario.getUsername());
+            return ResponseApp.builder().status(200).messaje("El usuario o correo ya está registrado en el sistema.").build();
         } catch (Exception e) {
             logger.error("Error al registrar el usuario: {}", e.getMessage());
             return ResponseApp.builder().status(500).messaje("Usuario no registrado satisfactoriamente").build();

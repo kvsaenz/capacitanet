@@ -6,12 +6,23 @@ import co.com.capacitanet.model.usuario.Usuario;
 import co.com.capacitanet.model.usuario.gateways.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class UsuarioUseCase {
 
     private final UsuarioRepository usuarioRepository;
 
+    private static final List<String> ALLOWED_DOMAINS = List.of("@bancodebogota.com.co");
+
+
+
     public ResponseApp registrarUsuario(Usuario usuario) {
+        if (!ALLOWED_DOMAINS.stream().anyMatch(usuario.getUsername()::endsWith)) {
+            return ResponseApp.builder().status(401)
+                    .messaje("El correo ingresado no pertenece al dominio corporativo.").build();
+        }
+
         return usuarioRepository.registrarUsuario(usuario);
     }
 
