@@ -1,19 +1,20 @@
 package co.com.capacitanet.model.usuario.gateways;
 
+import co.com.capacitanet.model.response.ResponseApp;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
 
 public interface UsuarioRepository {
 
-    String registrarUsuario(Usuario usuario);
+    ResponseApp registrarUsuario(Usuario usuario);
 
-    String actualizarUsuario(ChangePassword usuario);
+    ResponseApp actualizarUsuario(ChangePassword usuario);
 
-    String perfilUsuario(String userId);
+    ResponseApp perfilUsuario(String userId);
 
-    String login(Usuario usuario);
+    ResponseApp login(Usuario usuario);
 
-    String eliminarUsuario(Usuario usuario);
+    ResponseApp eliminarUsuario(Usuario usuario);
 
-    String suscribirCurso(String userId, String idCurso);
+    ResponseApp suscribirCurso(String userId, String idCurso);
 }

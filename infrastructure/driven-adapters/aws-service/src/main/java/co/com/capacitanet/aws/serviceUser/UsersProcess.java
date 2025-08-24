@@ -3,6 +3,8 @@ package co.com.capacitanet.aws.serviceUser;
 import co.com.capacitanet.aws.serviceCurso.CursoProcess;
 import co.com.capacitanet.helpers.AuthService;
 import co.com.capacitanet.helpers.Password;
+import co.com.capacitanet.model.curso.Curso;
+import co.com.capacitanet.model.response.ResponseApp;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
 import co.com.capacitanet.model.usuario.gateways.UsuarioRepository;
@@ -40,7 +42,7 @@ public class UsersProcess implements UsuarioRepository {
 
 
     @Override
-    public String registrarUsuario(Usuario usuario) {
+    public ResponseApp registrarUsuario(Usuario usuario) {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -58,21 +60,20 @@ public class UsersProcess implements UsuarioRepository {
 
             client.putItem(request);
             logger.info("Usuario registrado: {}", usuario.getUsername());
-            return "Usuario registrado exitosamente";
+            return ResponseApp.builder().status(200).messaje("Usuario registrado exitosamente").build();
         } catch (JsonProcessingException e) {
-            logger.error("Error al procesar los datos del usuario: {}", e.getMessage());
-            return "Usuario no registrado";
+            return ResponseApp.builder().status(500).messaje("Usuario no registrado").build();
         } catch (ConditionalCheckFailedException e) {
             logger.error("El usuario ya existe: {}", usuario.getUsername());
-            return "Usuario ya existe";
+            return ResponseApp.builder().status(500).messaje("Usuario ya existe").build();
         } catch (Exception e) {
             logger.error("Error al registrar el usuario: {}", e.getMessage());
-            return "Usuario no registrado satisfactoriamente";
+            return ResponseApp.builder().status(500).messaje("Usuario no registrado satisfactoriamente").build();
         }
     }
 
     @Override
-    public String actualizarUsuario(ChangePassword usuario) {
+    public ResponseApp actualizarUsuario(ChangePassword usuario) {
         try {
             Map<String, AttributeValue> key = new HashMap<>();
             key.put(USERNAME, AttributeValue.builder().s(usuario.getUsername()).build());
@@ -97,19 +98,19 @@ public class UsersProcess implements UsuarioRepository {
 
                 client.updateItem(request);
                 logger.info("Contraseña actualizada para el usuario: {}", usuario.getUsername());
-                return "Contraseña actualizada exitosamente";
+                return ResponseApp.builder().status(200).messaje("Contraseña actualizada exitosamente").build();
             } else {
                 logger.info("Usuario no existe para actualizar: {}", usuario.getUsername());
-                return "Usuario no exite";
+                return ResponseApp.builder().status(404).messaje("Usuario no exite").build();
             }
         } catch (Exception e) {
             logger.error("Error al actualizar la contraseña: {}", e.getMessage());
-            return "Error al actualizar la contraseña";
+            return ResponseApp.builder().status(500).messaje("Error al actualizar la contraseña").build();
         }
     }
 
     @Override
-    public String perfilUsuario(String userId) {
+    public ResponseApp perfilUsuario(String userId) {
         try {
             Map<String, AttributeValue> key = new HashMap<>();
             key.put(USERNAME, AttributeValue.builder().s(userId).build());
@@ -120,22 +121,24 @@ public class UsersProcess implements UsuarioRepository {
                 ObjectMapper mapper = new ObjectMapper();
                 Usuario storedUser = mapper.readValue(jsonData, Usuario.class);
                 storedUser.setPassword("********");
-                return mapper.writeValueAsString(storedUser);
+                return ResponseApp.builder().status(200).messaje(mapper.writeValueAsString(storedUser)).build();
             } else {
                 logger.info("Usuario no existe para obtener perfil: {}", userId);
-                return "Usuario no exite";
+                return ResponseApp.builder().status(404).messaje("Usuario no exite").build();
             }
         } catch (JsonProcessingException e) {
             logger.error("Error al procesar los datos en perfil del usuario: {}", e.getMessage());
-            return "Error al procesar los datos del usuario";
+            return ResponseApp.builder().status(500).messaje("Error al procesar los datos del usuario").build();
+
         } catch (Exception e) {
             logger.error("Error al obtener el perfil del usuario: {}", e.getMessage());
-            return "Error al obtener el perfil del usuario";
+            return ResponseApp.builder().status(500).messaje("Error al obtener el perfil del usuario").build();
+
         }
     }
 
     @Override
-    public String login(Usuario usuario) {
+    public ResponseApp login(Usuario usuario) {
         try {
             Map<String, AttributeValue> key = new HashMap<>();
             key.put(USERNAME, AttributeValue.builder().s(usuario.getUsername()).build());
@@ -149,30 +152,30 @@ public class UsersProcess implements UsuarioRepository {
                 if (storedUser.isActive()) {
                     if (Password.verificar(usuario.getPassword(), storedUser.getPassword())) {
                         logger.info("Login exitoso para el usuario: {}", usuario.getUsername());
-                        return new AuthService().generaJWT(usuario.getUsername());
+                        return ResponseApp.builder().status(200).messaje(new AuthService().generaJWT(usuario.getUsername())).build();
                     } else {
                         logger.info("Credenciales incorrectas para el usuario: {}", usuario.getUsername());
-                        return "Credenciales incorrectas";
+                        return ResponseApp.builder().status(401).messaje("El usuario o la contraseña no son correctos.").build();
                     }
                 } else {
                     logger.info("Usuario inactivo: {}", usuario.getUsername());
-                    return "Usuario inactivo";
+                    return ResponseApp.builder().status(404).messaje("Usuario inactivo").build();
                 }
             } else {
                 logger.info("Usuario no existe: {}", usuario.getUsername());
-                return "Usuario no exite";
+                return ResponseApp.builder().status(404).messaje("Usuario no exite").build();
             }
         } catch (JsonProcessingException e) {
             logger.error("Error al procesar los datos en login del usuario: {}", e.getMessage());
-            return "Error al procesar los datos del usuario";
+            return ResponseApp.builder().status(500).messaje("Error al procesar los datos del usuario").build();
         } catch (Exception e) {
             logger.error("Error en el proceso de login: {}", e.getMessage());
-            return "Error en el proceso de login";
+            return ResponseApp.builder().status(500).messaje("Error en el proceso de login").build();
         }
     }
 
     @Override
-    public String eliminarUsuario(Usuario usuario) {
+    public ResponseApp eliminarUsuario(Usuario usuario) {
         try {
             Map<String, AttributeValue> key = new HashMap<>();
             key.put(USERNAME, AttributeValue.builder().s(usuario.getUsername()).build());
@@ -197,19 +200,22 @@ public class UsersProcess implements UsuarioRepository {
 
                 client.updateItem(request);
                 logger.info("Usuario desactivado: {}", usuario.getUsername());
-                return "Usuario desactivado exitosamente";
+                return ResponseApp.builder().status(200).messaje("Usuario desactivado exitosamente").build();
+
             } else {
                 logger.info("Usuario no existe para eliminar: {}", usuario.getUsername());
-                return "Usuario no exite";
+                return ResponseApp.builder().status(404).messaje("Usuario no exite").build();
+
             }
         } catch (Exception e) {
             logger.error("Error al eliminar el usuario: {}", e.getMessage());
-            return "Error al eliminar el usuario";
+            return ResponseApp.builder().status(500).messaje("Error al eliminar el usuario").build();
+
         }
     }
 
     @Override
-    public String suscribirCurso(String userId, String idCurso) {
+    public ResponseApp suscribirCurso(String userId, String idCurso) {
         try {
             // buscar el usuario en la base de datos
             Map<String, AttributeValue> key = new HashMap<>();
@@ -221,15 +227,22 @@ public class UsersProcess implements UsuarioRepository {
                 Usuario storedUser = mapper.readValue(jsonData, Usuario.class);
 
                 // verificar si el curso ya está en la lista de cursos suscritos
-                if (storedUser.getCursos() != null && storedUser.getCursos().contains(idCurso)) {
+                if (storedUser.getCursos() != null &&
+                        storedUser.getCursos().stream().anyMatch(c -> c.getCursoId().equals(idCurso))) {
                     logger.info("El usuario ya está suscrito al curso: {}", idCurso);
-                    return "Ya estás suscrito a este curso";
+                    return ResponseApp.builder().status(200).messaje("Ya estás suscrito a este curso").build();
+
                 } else {
                     // agregar el curso a la lista de cursos suscritos
-                    storedUser.getCursos().add(cursoProcess.obtenerCursoPorId(idCurso));
+                    Curso agregar = cursoProcess.obtenerCursoPorId(idCurso);
+                    if (agregar.isActive()) {
+                        storedUser.getCursos().add(cursoProcess.obtenerCursoPorId(idCurso));
+                    } else {
+                        logger.info("Curso inactivo");
+                        return ResponseApp.builder().status(404).messaje("Curso inactivo o inexistente").build();
+                    }
 
                     String json = mapper.writeValueAsString(storedUser);
-
                     UpdateItemRequest request = UpdateItemRequest.builder()
                             .tableName(TABLE_NAME)
                             .key(key)
@@ -241,15 +254,15 @@ public class UsersProcess implements UsuarioRepository {
 
                     client.updateItem(request);
                     logger.info("Usuario {} suscrito al curso: {}", userId, idCurso);
-                    return "Suscripción al curso exitosa";
+                    return ResponseApp.builder().status(200).messaje("Suscripción al curso exitosa").build();
                 }
             } else {
                 logger.info("Usuario no existe para suscribir al curso: {}", userId);
-                return "Usuario no exite";
+                return ResponseApp.builder().status(404).messaje("Usuario no exite").build();
             }
         } catch (Exception e) {
             logger.error("Error al suscribir el curso: {}", e.getMessage());
         }
-        return "";
+        return ResponseApp.builder().status(500).messaje("Accion no permitida").build();
     }
 }

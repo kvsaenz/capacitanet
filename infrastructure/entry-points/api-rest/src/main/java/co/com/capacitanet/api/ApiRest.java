@@ -2,6 +2,7 @@ package co.com.capacitanet.api;
 
 import co.com.capacitanet.model.curso.Curso;
 import co.com.capacitanet.model.curso.Recurso;
+import co.com.capacitanet.model.response.ResponseApp;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
 import co.com.capacitanet.usecase.curso.CursoUseCase;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,9 +45,9 @@ public class ApiRest {
      *
      * @return Un mensaje indicando que el servicio está activo.
      */
-    @GetMapping(path = "/health")
-    public String commandName() {
-        return "hola";
+    @GetMapping(path = "/health", produces = "application/json")
+    public ResponseEntity<ResponseApp> commandName() {
+        return ResponseEntity.status(200).body(ResponseApp.builder().status(200).messaje("Healt Check CapacitaNet").build());
     }
 
     /**
@@ -54,11 +56,12 @@ public class ApiRest {
      * @param usuario Objeto que contiene la información del usuario a registrar.
      * @return Mensaje de confirmación del registro.
      */
-    @PostMapping(path = "/registrar-usuario")
-    public String registrarUsuario(@RequestBody Usuario usuario) {
+    @PostMapping(path = "/registrar-usuario", produces = "application/json")
+    public ResponseEntity<ResponseApp> registrarUsuario(@RequestBody Usuario usuario) {
         logger.info("Iniciando registro de usuario: {}", usuario.getUsername());
         usuario.setActive(Boolean.TRUE);
-        return usuarioUseCase.registrarUsuario(usuario);
+        ResponseApp response = usuarioUseCase.registrarUsuario(usuario);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     /**
@@ -67,10 +70,11 @@ public class ApiRest {
      * @param usuario Objeto que contiene la información del usuario y la nueva contraseña.
      * @return Mensaje de confirmación de la actualización.
      */
-    @PostMapping(path = "/actualizar-password")
-    public String actualizarUsuario(@RequestBody ChangePassword usuario) {
+    @PostMapping(path = "/actualizar-password", produces = "application/json")
+    public ResponseEntity<ResponseApp> actualizarUsuario(@RequestBody ChangePassword usuario) {
         logger.info("Iniciando actualizacion de password para el usuario: {}", usuario.getUsername());
-        return usuarioUseCase.actualizarUsuario(usuario);
+        ResponseApp response = usuarioUseCase.actualizarUsuario(usuario);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     /**
@@ -79,11 +83,12 @@ public class ApiRest {
      * @param request Objeto HttpServletRequest que contiene información de la solicitud.
      * @return Información del perfil del usuario.
      */
-    @GetMapping(path = "/perfil-usuario")
-    public String perfilUsuario(HttpServletRequest request) {
+    @GetMapping(path = "/perfil-usuario", produces = "application/json")
+    public ResponseEntity<Object> perfilUsuario(HttpServletRequest request) {
         String userId = (String) request.getAttribute(USER_ID);
         logger.info("Iniciando obtencion de perfil para el usuario: {}", userId);
-        return usuarioUseCase.perfilUsuario(userId);
+        ResponseApp response = usuarioUseCase.perfilUsuario(userId);
+        return ResponseEntity.status(response.getStatus()).body(response.getMessaje());
     }
 
     /**
@@ -93,15 +98,17 @@ public class ApiRest {
      * @param request Objeto HttpServletRequest que contiene información de la solicitud.
      * @return Mensaje de confirmación o error si no está autorizado.
      */
-    @PostMapping(path = "/borrar-usuario")
-    public String borrarUsuario(@RequestBody Usuario usuario,
+    @PostMapping(path = "/borrar-usuario", produces = "application/json")
+    public ResponseEntity<ResponseApp> borrarUsuario(@RequestBody Usuario usuario,
                                 HttpServletRequest request) {
         logger.info("Iniciando borrado de usuario: {}", usuario.getUsername());
         String userId = (String) request.getAttribute(USER_ID);
         if (userId.equalsIgnoreCase(usuario.getUsername())) {
-            return usuarioUseCase.eliminarUsuario(usuario);
+            ResponseApp response = usuarioUseCase.eliminarUsuario(usuario);
+            return ResponseEntity.status(response.getStatus()).body(response);
         } else {
-            return "Cambios no autorizados";
+            return ResponseEntity.status(401).body(ResponseApp.builder()
+                    .status(401).messaje("Cambios no autorizados").build());
         }
     }
 
@@ -111,10 +118,11 @@ public class ApiRest {
      * @param usuario Objeto que contiene las credenciales del usuario.
      * @return Mensaje de confirmación del inicio de sesión.
      */
-    @PostMapping(path = "/login")
-    public String login(@RequestBody Usuario usuario) {
+    @PostMapping(path = "/login", produces = "application/json")
+    public ResponseEntity<ResponseApp> login(@RequestBody Usuario usuario) {
         logger.info("Iniciando login para el usuario: {}", usuario.getUsername());
-        return usuarioUseCase.login(usuario);
+        ResponseApp response = usuarioUseCase.login(usuario);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     /**
@@ -124,13 +132,14 @@ public class ApiRest {
      * @param request Objeto HttpServletRequest que contiene información de la solicitud.
      * @return Mensaje de confirmación de la creación del curso.
      */
-    @PostMapping(path = "/crear-curso")
-    public String crearCurso(@RequestBody Curso curso,
+    @PostMapping(path = "/crear-curso", produces = "application/json")
+    public ResponseEntity<ResponseApp> crearCurso(@RequestBody Curso curso,
                              HttpServletRequest request) {
         logger.info("Iniciando creacion de curso: {}", curso.getTitulo());
         String userId = (String) request.getAttribute(USER_ID);
         curso.setCreadorUsername(userId);
-        return cursoUseCase.crearCurso(curso);
+        ResponseApp response = cursoUseCase.crearCurso(curso);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     /**
@@ -140,13 +149,14 @@ public class ApiRest {
      * @param request Objeto HttpServletRequest que contiene información de la solicitud.
      * @return Mensaje de confirmación de la suscripción.
      */
-    @PostMapping(path = "/suscribirme-curso")
-    public String suscribirmeCurso(@RequestBody Curso curso,
+    @PostMapping(path = "/suscribirme-curso", produces = "application/json")
+    public ResponseEntity<ResponseApp> suscribirmeCurso(@RequestBody Curso curso,
                                    HttpServletRequest request) {
         logger.info("Iniciando suscripcion a curso: {}", curso.getCursoId());
         String userId = (String) request.getAttribute(USER_ID);
 
-        return usuarioUseCase.suscribirCurso(userId, curso.getCursoId());
+        ResponseApp response = usuarioUseCase.suscribirCurso(userId, curso.getCursoId());
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     /**
@@ -155,11 +165,28 @@ public class ApiRest {
      * @param request Objeto HttpServletRequest que contiene información de la solicitud.
      * @return Lista de cursos disponibles.
      */
-    @GetMapping(path = "/obtener-cursos")
-    public String obtenerCurso(HttpServletRequest request) {
+    @GetMapping(path = "/obtener-cursos", produces = "application/json")
+    public ResponseEntity<Object> obtenerCurso(HttpServletRequest request) {
         logger.info("Iniciando obtencion de cursos");
         String userId = (String) request.getAttribute(USER_ID);
-        return cursoUseCase.obtenerCursos(userId);
+        ResponseApp response = cursoUseCase.obtenerCursos(userId);
+        return ResponseEntity.status(response.getStatus()).body(response.getMessaje());
+    }
+
+    /**
+     * Permite activar un curso que estaba en proceso de creacion
+     *
+     * @param curso   ID del curso a activar
+     * @param request Objeto HttpServletRequest que contiene información de la solicitud
+     * @return Mensaje de confirmación de la activación del curso
+     */
+    @PostMapping(path = "/activar-curso", produces = "application/json")
+    public ResponseEntity<ResponseApp> activarCurso(@RequestBody Curso curso,
+                                                    HttpServletRequest request) {
+        logger.info("Iniciando activacion de curso: {}", curso.getCursoId());
+        String userId = (String) request.getAttribute(USER_ID);
+        ResponseApp response = cursoUseCase.activarCurso(curso.getCursoId(), userId);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     /**
@@ -173,7 +200,7 @@ public class ApiRest {
      * @throws IOException Si ocurre un error al manejar el archivo.
      */
     @PostMapping("/cursos/{cursoId}/recursos")
-    public String subirRecurso(
+    public ResponseEntity<ResponseApp> subirRecurso(
             @PathVariable("cursoId") String cursoId,
             @RequestParam("file") MultipartFile file,
             @RequestParam("order") String order,
@@ -192,6 +219,7 @@ public class ApiRest {
                 .nombre(file.getOriginalFilename())
                 .build(), temp);
 
-        return "Recurso agregado al curso " + cursoId;
+        return ResponseEntity.status(200).body(ResponseApp
+                .builder().status(200).messaje("Recurso agregado al curso " + cursoId).build());
     }
 }

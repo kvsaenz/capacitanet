@@ -1,5 +1,6 @@
 package co.com.capacitanet.usecase.usuario;
 
+import co.com.capacitanet.model.response.ResponseApp;
 import co.com.capacitanet.model.usuario.ChangePassword;
 import co.com.capacitanet.model.usuario.Usuario;
 import co.com.capacitanet.model.usuario.gateways.UsuarioRepository;
@@ -10,41 +11,41 @@ public class UsuarioUseCase {
 
     private final UsuarioRepository usuarioRepository;
 
-    public String registrarUsuario(Usuario usuario) {
+    public ResponseApp registrarUsuario(Usuario usuario) {
         return usuarioRepository.registrarUsuario(usuario);
     }
 
-    public String actualizarUsuario(ChangePassword usuario) {
+    public ResponseApp actualizarUsuario(ChangePassword usuario) {
         Usuario usuario1 = Usuario.builder()
                 .username(usuario.getUsername())
                 .password(usuario.getPassword())
                 .build();
-        String token = usuarioRepository.login(usuario1);
-        if (token.split("\\.").length == 3) {
+        ResponseApp token = usuarioRepository.login(usuario1);
+        if (token.getMessaje().split("\\.").length == 3) {
             return usuarioRepository.actualizarUsuario(usuario);
         } else {
-            return "Cambios no autorizados";
+            return ResponseApp.builder().status(401).messaje("Cambios no autorizados").build();
         }
     }
 
-    public String eliminarUsuario(Usuario usuario) {
-        String token = usuarioRepository.login(usuario);
-        if (token.split("\\.").length == 3) {
+    public ResponseApp eliminarUsuario(Usuario usuario) {
+        ResponseApp token = usuarioRepository.login(usuario);
+        if (token.getMessaje().split("\\.").length == 3) {
             return usuarioRepository.eliminarUsuario(usuario);
         } else {
-            return "Cambios no autorizados";
+            return ResponseApp.builder().status(401).messaje("Cambios no autorizados").build();
         }
     }
 
-    public String perfilUsuario(String userId) {
+    public ResponseApp perfilUsuario(String userId) {
         return usuarioRepository.perfilUsuario(userId);
     }
 
-    public String login(Usuario usuario) {
+    public ResponseApp login(Usuario usuario) {
         return usuarioRepository.login(usuario);
     }
 
-    public String suscribirCurso(String userId, String idCurso) {
+    public ResponseApp suscribirCurso(String userId, String idCurso) {
         return usuarioRepository.suscribirCurso(userId, idCurso);
     }
 }

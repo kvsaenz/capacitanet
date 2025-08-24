@@ -8,6 +8,6 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "http://localhost:4200,http://localhost:8080,http://localhost:3000"
 AWS_ACCESS_KEY_ID: "your_access_key_id"
 AWS_SECRET_ACCESS_KEY: "your_secret_access_key"
