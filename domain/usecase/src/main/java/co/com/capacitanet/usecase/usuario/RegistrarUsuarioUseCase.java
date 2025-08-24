@@ -17,11 +17,20 @@ public class RegistrarUsuarioUseCase {
     public String actualizarUsuario(ChangePassword usuario) {
         Usuario usuario1 = Usuario.builder()
                 .username(usuario.getUsername())
-                .passwordHash(usuario.getPasswordHash())
+                .password(usuario.getPassword())
                 .build();
         String token = usuarioRepository.login(usuario1);
         if (token.split("\\.").length == 3) {
             return usuarioRepository.actualizarUsuario(usuario);
+        } else {
+            return "Cambios no autorizados";
+        }
+    }
+
+    public String eliminarUsuario(Usuario usuario) {
+        String token = usuarioRepository.login(usuario);
+        if (token.split("\\.").length == 3) {
+            return usuarioRepository.eliminarUsuario(usuario);
         } else {
             return "Cambios no autorizados";
         }

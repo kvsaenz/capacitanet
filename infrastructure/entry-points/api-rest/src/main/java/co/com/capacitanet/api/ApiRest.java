@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiRest {
 
     private static final Logger logger = LogManager.getLogger(ApiRest.class);
+    private static final String USER_ID = "userId";
 
 
     RegistrarUsuarioUseCase registrarUsuarioUseCase;
@@ -36,6 +37,7 @@ public class ApiRest {
     @PostMapping(path = "/registrar-usuario")
     public String registrarUsuario(@RequestBody Usuario usuario) {
         logger.info("Iniciando registro de usuario: {}", usuario.getUsername());
+        usuario.setActive(Boolean.TRUE);
         return registrarUsuarioUseCase.registrarUsuario(usuario);
     }
 
@@ -45,6 +47,17 @@ public class ApiRest {
         return registrarUsuarioUseCase.actualizarUsuario(usuario);
     }
 
+    @PostMapping(path = "/borrar-usuario")
+    public String borrarUsuario(@RequestBody Usuario usuario,
+                                HttpServletRequest request) {
+        logger.info("Iniciando borrado de usuario: {}", usuario.getUsername());
+        String userId = (String) request.getAttribute(USER_ID);
+        if (userId.equalsIgnoreCase(usuario.getUsername())) {
+            return registrarUsuarioUseCase.eliminarUsuario(usuario);
+        } else {
+            return "Cambios no autorizados";
+        }
+    }
 
     @PostMapping(path = "/login")
     public String login(@RequestBody Usuario usuario) {
@@ -57,9 +70,16 @@ public class ApiRest {
     public String crearCurso(@RequestBody Curso curso,
                              HttpServletRequest request) {
         logger.info("Iniciando creacion de curso: {}", curso.getTitulo());
-        String userId = (String) request.getAttribute("userId");
+        String userId = (String) request.getAttribute(USER_ID);
         curso.setCreadorUsername(userId);
         return cursoUseCase.crearCurso(curso);
+    }
+
+    @GetMapping(path = "/obtener-cursos")
+    public String obtenerCurso(HttpServletRequest request) {
+        logger.info("Iniciando obtencion de cursos");
+        String userId = (String) request.getAttribute(USER_ID);
+        return cursoUseCase.obtenerCursos(userId);
     }
 
 }

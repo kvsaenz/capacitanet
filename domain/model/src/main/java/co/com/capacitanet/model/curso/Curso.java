@@ -19,5 +19,6 @@ public class Curso {
     private String titulo;
     private String descripcion;
     private String creadorUsername;
+    private List<String> tags;
     private List<Recurso> recursos;
 }
