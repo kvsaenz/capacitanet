@@ -1,4 +1,4 @@
-package co.com.capacitanet.model.curso;
+package co.com.capacitanet.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Recurso {
-    private String id;
-    private int order;
-    private boolean visualizado;
-    private String tipo;
-    private String nombre;
-    private String s3Key;
+public class ResponseApp {
+
+    private int status;
+    private String messaje;
+
 }

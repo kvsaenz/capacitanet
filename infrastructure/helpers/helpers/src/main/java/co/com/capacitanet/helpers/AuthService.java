@@ -22,7 +22,7 @@ public class AuthService {
         return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 3600_000)) // 1h
+                .withExpiresAt(new Date(System.currentTimeMillis() + 600_000)) // 1h
                 .sign(this.algorithm);
     }
 
