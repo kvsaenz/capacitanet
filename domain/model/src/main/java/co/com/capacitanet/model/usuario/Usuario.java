@@ -1,5 +1,6 @@
 package co.com.capacitanet.model.usuario;
 
+import co.com.capacitanet.model.curso.Curso;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,22 @@ public class Usuario {
     private String apellido;
     private String password;
     private boolean active;
-    private List<String> cursos;
+    private List<Curso> cursos;
     private List<String> insignias;
+
+    public List<Curso> getCursos() {
+        if (cursos == null) {
+            return List.of();
+        }
+        return cursos;
+    }
+
+    public List<String> getInsignias() {
+        if (insignias == null) {
+            return List.of();
+        }
+        return insignias;
+    }
+
 
 }
