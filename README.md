@@ -1,5 +1,6 @@
 <!-- TOC -->
-* [CapacitaNet](#capacitanet)
+# Capacitanet - Backend
+* [Tabla de contenido Capacitanet - Backend](#capacitanet)
   * [Descripción del proyecto](#descripción-del-proyecto)
     * [Contexto](#contexto)
     * [Objetivo general](#objetivo-general)
@@ -40,12 +41,10 @@ Desarrollar una plataforma interna de capacitación que centralice y organice cu
 ### Alcance
 El proyecto comprende el diseño, desarrollo e implementación de una plataforma interna de capacitación que permitirá a los colaboradores:
 
-- Registro y autenticación de usuarios mediante credenciales corporativas (usuario de red o correo institucional).
+- Registro y autenticación de usuarios mediante credenciales corporativas (correo institucional).
 - Gestión de contenidos: subir y consultar materiales en distintos formatos (videos, PDF, PPT, guías, DOCX).
 - Organización de cursos por módulos técnicos (Fullstack, APIs e Integraciones, Cloud, Data Engineer), estructurados en capítulos.
 - Seguimiento de progreso: visualizar cursos iniciados, en progreso y completados, así como mantener un histórico de formación.
-- Reconocimiento automático: generación de insignias digitales por cada curso completado y visualización en el perfil del colaborador.
-- Notificaciones: envío de alertas en el portal y en correos cuando se publiquen nuevos cursos.
 - Escalabilidad y accesibilidad: plataforma disponible vía web, diseñada para crecer en contenidos y usuarios.
 - Seguridad: validación de acceso restringido al dominio corporativo, manejo seguro de datos y control de permisos.
 ## Requerimientos
@@ -69,7 +68,7 @@ El proyecto comprende el diseño, desarrollo e implementación de una plataforma
 ![Contenido.png](resources/Contenido.png)
 ![Portal.png](resources/Portal.png)
 ### Diagrama de arquitectura del sistema
-![Arquitectura.png](resources/Arquitectura.png)
+![capacitaNet.png](resources/CapacitaNet.png)
 ## Historias de Usuario y Épicas
 ### Épicas
 - EP001: Gestión de usuarios
@@ -78,10 +77,12 @@ El proyecto comprende el diseño, desarrollo e implementación de una plataforma
 - EP004: Portal capacitaciones
 - EP005: Notificaciones
 ### Historias de Usuario
+#### Funcionalidades actuales
 - HU001: Como colaborador, quiero poder registrarme y acceder usando mi usuario de red o correo corporativo para ingresar al portal de capacitaciones de manera segura.
 - HU002: Como usuario del portal, quiero subir videos, documentos PDF, presentaciones y guías para poner a disposición del personal el material de capacitación.
 - HU003: Como usuario del portal, quiero visualizar los cursos organizados por módulos (Fullstack, APIs e Integraciones, Cloud, Data Engineer) para identificar fácilmente el área de formación de mi interés.
 - HU004: Como usuario del portal, quiero ver el avance de los cursos que he realizado, para hacer seguimiento a mi proceso de capacitación.
+#### Próximos pasos (en desarrollo / backlog)
 - HU005: Como usuario del portal, quiero recibir una insignia digital al completar un curso para reconocer y visualizar mis logros en el perfil.
 - HU006: Como usuario del portal, quiero que cada curso esté dividido en capítulos para avanzar de forma estructurada y marcar mi progreso por secciones.
 - HU007: Como usuario del portal, quiero recibir notificaciones (correo o alerta en el sistema) cuando haya un nuevo curso disponible para mantenerme informado de las capacitaciones.
@@ -99,7 +100,6 @@ El proyecto comprende el diseño, desarrollo e implementación de una plataforma
 #### Desarrollo y control de versiones
 - **Git**
 - **Editor de código**: Visual Studio Code o IntelliJ IDEA (recomendado)
-- **Conocimientos básicos en frontend**: JavaScript, HTML, CSS y frameworks como **Angular**
 - **Experiencia en autenticación/autorización** con **JWT**
 #### Bases de datos y almacenamiento
 - **DynamoDB**:
@@ -115,27 +115,17 @@ El proyecto comprende el diseño, desarrollo e implementación de una plataforma
 git clone https://github.com/kvsaenz/capacitanet.git    
 cd  capacitanet 
 ```
-### Pasos de instalación
-```bash
-npm install
-```
 ### Configuración inicial
-- Crear un archivo `.env` en la raíz del proyecto con las siguientes variables de entorno:
-```
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/capacitanet
-JWT_SECRET=tu_secreto_jwt
-EMAIL_SERVICE=tu_servicio_de_correo
-EMAIL_USER=tu_usuario_de_correo
-EMAIL_PASS=tu_contraseña_de_correo
-```
-- Configurar la base de datos MongoDB y asegurarse de que esté en funcionamiento.
-- Configurar el servidor de correo electrónico para las notificaciones (opcional).
-### Comandos para ejecutar la aplicación
-```bash
-npm start
-```
-- La aplicación estará disponible en `http://localhost:3000` (o el puerto configurado en el archivo `.env`).
+Crear variables de ambiente
+- aws.dynamodb.endpoint=https://dynamodb.us-east-1.amazonaws.com
+- aws.region=us-east-1;
+- AWS_ACCESS_KEY_ID_DYNAMO=xxxxxxPxxxxxxxxxRxxxxxxxxxx4x
+- AWS_SECRET_ACCESS_KEY_DYNAMO=xxxxxxxxxxxxxV1CKIxvWSxxxxxxxxxxxxxxxx
+- SECRET_KEY=xxxxxxxxxxxxxxxxx7pTnxxxxxxxxxxxUxxvxxxU
+- AWS_ACCESS_KEY_ID_S3=AKxxxxxxxxxxQ3xxxxxxxxC6x3M4
+- AWS_SECRET_ACCESS_KEY_S3=xxxxxxxxxTNxxxxxxCSxxxxxxBxxxxxoo
+
+La aplicación backend expuesta por el puerto 9080
 ## Uso de la Aplicación
 ### Instrucciones para el usuario final
 1. Acceder a la plataforma mediante el navegador web.
@@ -143,14 +133,7 @@ npm start
 3. Explorar los cursos disponibles organizados por módulos.
 4. Seleccionar un curso para ver los detalles y comenzar la capacitación.
 5. Seguir el progreso del curso y completar los capítulos.
-6. Al finalizar un curso, recibir una insignia digital en el perfil.
-7. Consultar el historial de formación y logros en el perfil.
-8. Configurar las notificaciones para recibir alertas sobre nuevos cursos.
-### Capturas de pantalla o ejemplos de uso
-![Login.png](resources/Login.png)
-![Dashboard.png](resources/Dashboard.png)
-![CourseDetail.png](resources/CourseDetail.png)         
-![Profile.png](resources/Profile.png)
+   
 ## Contribución
 ### Guía para contribuir al proyecto
 1. Crear una copia independiente del proyecto.
