@@ -74,7 +74,7 @@ jacoco {
 }
 
 tasks.register('jacocoMergedReport', JacocoReport) {
-    dependsOn = [test, subprojects.jacocoTestReport, pitestReportAggregate]
+    dependsOn = [subprojects.jacocoTestReport, pitestReportAggregate]
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
@@ -94,12 +94,12 @@ tasks.withType(JavaCompile).configureEach {
 
 pitestReportAggregate {
     doLast {
-        def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
+        def reportDir = file("$buildDir/reports/pitest")
         def consolidatedReport = new File(reportDir, 'mutations.xml')
         consolidatedReport.withWriter { writer ->
             writer.write("<mutations>\n")
             subprojects.each { subproject ->
-                def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
+                def xmlReport = new File(subproject.buildDir, "reports/pitest/mutations.xml")
                 if (xmlReport.exists()) {
                     def xmlContent = xmlReport.text
                     xmlContent = xmlContent.replaceAll("<\\?xml[^>]*>", "")
