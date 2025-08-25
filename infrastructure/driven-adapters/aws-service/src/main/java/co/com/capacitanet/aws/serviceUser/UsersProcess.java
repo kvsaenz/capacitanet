@@ -24,6 +24,11 @@ import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Clase que implementa la interfaz UsuarioRepository para manejar la lógica de negocio
+ * relacionada con los usuarios. Esta clase interactúa con DynamoDB para almacenar y
+ * recuperar información de los usuarios.
+ */
 @Component
 public class UsersProcess implements UsuarioRepository {
 
@@ -38,12 +43,23 @@ public class UsersProcess implements UsuarioRepository {
 
     private final DynamoDbClient client;
 
+    /**
+     * Clase que implementa la interfaz UsuarioRepository para manejar la lógica de negocio
+     * relacionada con los usuarios. Esta clase interactúa con DynamoDB para almacenar y
+     * recuperar información de los usuarios.
+     */
     public UsersProcess(CursoProcess cursoProcess, DynamoDbClient client) {
         this.cursoProcess = cursoProcess;
         this.client = client;
     }
 
 
+    /**
+     * Registra un nuevo usuario en la base de datos.
+     *
+     * @param usuario Objeto Usuario con la información del usuario a registrar.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp registrarUsuario(Usuario usuario) {
 
@@ -74,6 +90,12 @@ public class UsersProcess implements UsuarioRepository {
         }
     }
 
+    /**
+     * Actualiza la contraseña de un usuario existente.
+     *
+     * @param usuario Objeto ChangePassword con la información del usuario y la nueva contraseña.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp actualizarUsuario(ChangePassword usuario) {
         try {
@@ -110,6 +132,12 @@ public class UsersProcess implements UsuarioRepository {
         }
     }
 
+    /**
+     * Obtiene el perfil de un usuario por su ID.
+     *
+     * @param userId ID del usuario a buscar.
+     * @return Respuesta con la información del perfil del usuario o un mensaje de error.
+     */
     @Override
     public ResponseApp perfilUsuario(String userId) {
         try {
@@ -137,6 +165,12 @@ public class UsersProcess implements UsuarioRepository {
         }
     }
 
+    /**
+     * Realiza el proceso de inicio de sesión para un usuario.
+     *
+     * @param usuario Objeto Usuario con las credenciales de inicio de sesión.
+     * @return Respuesta indicando el resultado del inicio de sesión.
+     */
     @Override
     public ResponseApp login(Usuario usuario) {
         try {
@@ -173,6 +207,12 @@ public class UsersProcess implements UsuarioRepository {
         }
     }
 
+    /**
+     * Desactiva un usuario en la base de datos.
+     *
+     * @param usuario Objeto Usuario con la información del usuario a desactivar.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp eliminarUsuario(Usuario usuario) {
         try {
@@ -212,6 +252,13 @@ public class UsersProcess implements UsuarioRepository {
         }
     }
 
+    /**
+     * Suscribe a un usuario a un curso específico.
+     *
+     * @param userId  ID del usuario a suscribir.
+     * @param idCurso ID del curso al que se desea suscribir.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp suscribirCurso(String userId, String idCurso) {
         try {
@@ -263,6 +310,13 @@ public class UsersProcess implements UsuarioRepository {
         return ResponseApp.builder().status(500).message("Accion no permitida").build();
     }
 
+    /**
+     * Marca un módulo como visualizado para un usuario.
+     *
+     * @param userId    ID del usuario que visualizó el módulo.
+     * @param verModulo Objeto VerModulo con la información del módulo visualizado.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp verModulo(String userId, VerModulo verModulo) {
         try {
@@ -305,6 +359,12 @@ public class UsersProcess implements UsuarioRepository {
         return null;
     }
 
+    /**
+     * Obtiene un usuario por su ID.
+     *
+     * @param userId ID del usuario a buscar.
+     * @return Objeto Usuario con la información del usuario o null si no se encuentra.
+     */
     private Usuario getUsuarioPorId(String userId) {
         try {
             Map<String, AttributeValue> key = new HashMap<>();

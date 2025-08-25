@@ -29,6 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Clase que implementa la interfaz CursoRepository para manejar la lógica de negocio
+ * relacionada con los cursos. Esta clase interactúa con DynamoDB y S3 para almacenar
+ * y recuperar información de los cursos y sus recursos.
+ */
+
 @Component
 public class CursoProcess implements CursoRepository {
 
@@ -44,6 +50,13 @@ public class CursoProcess implements CursoRepository {
     private final S3Client s3Client;
     private final S3Presigner presigner;
 
+    /**
+     * Constructor de la clase CursoProcess.
+     *
+     * @param client    Cliente de DynamoDB para interactuar con la base de datos.
+     * @param s3Client  Cliente de S3 para interactuar con el almacenamiento de objetos.
+     * @param presigner Cliente para generar URLs prefirmadas de S3.
+     */
     public CursoProcess(DynamoDbClient client, S3Client s3Client, S3Presigner presigner) {
         this.client = client;
         this.s3Client = s3Client;
@@ -51,6 +64,13 @@ public class CursoProcess implements CursoRepository {
     }
 
 
+    /**
+     * Obtiene los cursos disponibles o inactivos según el estado.
+     *
+     * @param userId ID del usuario que solicita los cursos.
+     * @param estado Estado de los cursos a filtrar (activos/inactivos).
+     * @return Respuesta con la lista de cursos o un mensaje de error.
+     */
     @Override
     public ResponseApp obtenerCursos(String userId, boolean estado) {
         ScanRequest request = ScanRequest.builder()
@@ -91,6 +111,12 @@ public class CursoProcess implements CursoRepository {
         }
     }
 
+    /**
+     * Crea un nuevo curso en la base de datos.
+     *
+     * @param curso Objeto Curso con la información del curso a registrar.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp crearCurso(Curso curso) {
         try {
@@ -120,6 +146,14 @@ public class CursoProcess implements CursoRepository {
         }
     }
 
+    /**
+     * Agrega un recurso a un curso existente.
+     *
+     * @param cursoId ID del curso al que se desea agregar el recurso.
+     * @param recurso Objeto Recurso con la información del recurso a agregar.
+     * @param file    Archivo asociado al recurso.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp agregarRecurso(String cursoId, Recurso recurso, File file) {
         try {
@@ -166,6 +200,14 @@ public class CursoProcess implements CursoRepository {
         }
     }
 
+
+    /**
+     * Activa o desactiva un curso según su estado actual.
+     *
+     * @param cursoId ID del curso a activar o desactivar.
+     * @param userId  ID del usuario que realiza la operación.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @Override
     public ResponseApp activarCurso(String cursoId, String userId) {
         try {
@@ -205,6 +247,12 @@ public class CursoProcess implements CursoRepository {
         }
     }
 
+    /**
+     * Genera una URL prefirmada para acceder a un recurso en S3.
+     *
+     * @param key Clave del recurso en S3.
+     * @return URL prefirmada o null en caso de error.
+     */
     private String generarS3Url(String key) {
         try {
 
@@ -229,7 +277,12 @@ public class CursoProcess implements CursoRepository {
         }
     }
 
-
+    /**
+     * Obtiene un curso por su ID.
+     *
+     * @param cursoId ID del curso a buscar.
+     * @return Objeto Curso o null si no se encuentra.
+     */
     public Curso obtenerCursoPorId(String cursoId) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put(CLAVE, AttributeValue.builder().s(cursoId).build());

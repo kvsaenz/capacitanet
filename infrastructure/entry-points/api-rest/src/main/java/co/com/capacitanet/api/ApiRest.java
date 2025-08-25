@@ -231,7 +231,7 @@ public class ApiRest {
         }
 
         // Construir el objeto Recurso y agregarlo al curso
-        cursoUseCase.agregarRecurso(cursoId, Recurso.builder()
+        ResponseApp response = cursoUseCase.agregarRecurso(cursoId, Recurso.builder()
                 .id(UUID.randomUUID().toString())
                 .order(Integer.parseInt(order))
                 .visualizado(false)
@@ -239,10 +239,16 @@ public class ApiRest {
                 .nombre(file.getOriginalFilename())
                 .build(), temp);
 
-        return ResponseEntity.status(200).body(ResponseApp
-                .builder().status(200).message("Recurso agregado al curso " + cursoId).build());
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
+    /**
+     * Marca un módulo como visualizado para un usuario autenticado.
+     *
+     * @param verModulo Objeto VerModulo que contiene la información del módulo visualizado.
+     * @param request   Objeto HttpServletRequest que contiene información de la solicitud.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     @PostMapping(path = "/ver-modulo", produces = "application/json")
     public ResponseEntity<ResponseApp> visualizarModCurso(@RequestBody VerModulo verModulo,
                                                           HttpServletRequest request) {

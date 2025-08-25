@@ -13,12 +13,27 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtro JWT que se ejecuta una vez por solicitud para validar tokens de autenticación.
+ * Este filtro verifica si las solicitudes contienen un token válido en el encabezado
+ * de autorización y lo valida antes de permitir el acceso a los recursos protegidos.
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final String PATH_APP = "/capacitanet";
     private static final String ENCODING = "UTF-8";
 
+    /**
+     * Metodo que realiza el filtrado de las solicitudes HTTP.
+     * Verifica si la solicitud es para un endpoint público o si contiene un token JWT válido.
+     *
+     * @param request     La solicitud HTTP entrante.
+     * @param response    La respuesta HTTP saliente.
+     * @param filterChain La cadena de filtros para continuar con el procesamiento.
+     * @throws ServletException Si ocurre un error en el procesamiento del filtro.
+     * @throws IOException      Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

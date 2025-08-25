@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Clase que contiene la lógica de negocio relacionada con los usuarios.
+ * Proporciona métodos para registrar, actualizar, eliminar usuarios, entre otras operaciones.
+ */
 @RequiredArgsConstructor
 public class UsuarioUseCase {
 
@@ -17,7 +21,12 @@ public class UsuarioUseCase {
     private static final List<String> ALLOWED_DOMAINS = List.of("@bancodebogota.com.co");
 
 
-
+    /**
+     * Registra un nuevo usuario después de validar los datos ingresados.
+     *
+     * @param usuario Objeto Usuario con la información del usuario a registrar.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     public ResponseApp registrarUsuario(Usuario usuario) {
         if (usuario.getUsername() == null || usuario.getUsername().trim().isEmpty()) {
             return ResponseApp.builder().status(400)
@@ -39,11 +48,15 @@ public class UsuarioUseCase {
             return ResponseApp.builder().status(400)
                     .message("El correo ingresado no pertenece al dominio corporativo.").build();
         }
-
-
         return usuarioRepository.registrarUsuario(usuario);
     }
 
+    /**
+     * Actualiza la información de un usuario existente.
+     *
+     * @param usuario Objeto ChangePassword con la información del usuario y la nueva contraseña.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     public ResponseApp actualizarUsuario(ChangePassword usuario) {
         Usuario usuario1 = Usuario.builder()
                 .username(usuario.getUsername())
@@ -57,6 +70,12 @@ public class UsuarioUseCase {
         }
     }
 
+    /**
+     * Elimina (desactiva) un usuario existente.
+     *
+     * @param usuario Objeto Usuario con la información del usuario a eliminar.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     public ResponseApp eliminarUsuario(Usuario usuario) {
         ResponseApp token = usuarioRepository.login(usuario);
         if (token.getMessage().split("\\.").length == 3) {
@@ -66,18 +85,44 @@ public class UsuarioUseCase {
         }
     }
 
+    /**
+     * Obtiene el perfil de un usuario por su ID.
+     *
+     * @param userId ID del usuario a buscar.
+     * @return Respuesta con la información del perfil del usuario.
+     */
     public ResponseApp perfilUsuario(String userId) {
         return usuarioRepository.perfilUsuario(userId);
     }
 
+    /**
+     * Realiza el proceso de inicio de sesión para un usuario.
+     *
+     * @param usuario Objeto Usuario con las credenciales de inicio de sesión.
+     * @return Respuesta indicando el resultado del inicio de sesión.
+     */
     public ResponseApp login(Usuario usuario) {
         return usuarioRepository.login(usuario);
     }
 
+    /**
+     * Suscribe a un usuario a un curso específico.
+     *
+     * @param userId  ID del usuario a suscribir.
+     * @param idCurso ID del curso al que se desea suscribir.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     public ResponseApp suscribirCurso(String userId, String idCurso) {
         return usuarioRepository.suscribirCurso(userId, idCurso);
     }
 
+    /**
+     * Marca un módulo como visualizado para un usuario.
+     *
+     * @param userId    ID del usuario que visualizó el módulo.
+     * @param verModulo Objeto VerModulo con la información del módulo visualizado.
+     * @return Respuesta indicando el resultado de la operación.
+     */
     public ResponseApp verModulo(String userId, VerModulo verModulo) {
         return usuarioRepository.verModulo(userId, verModulo);
     }
