@@ -70,7 +70,7 @@ El proyecto comprende el diseño, desarrollo e implementación de una plataforma
 ![Contenido.png](resources/Contenido.png)
 ![Portal.png](resources/Portal.png)
 ### Diagrama de arquitectura del sistema
-![capacitaNet.png](resources/CapacitaNet.png)
+![capacitaNet.png](resources/capacitaNet.png)
 ## Historias de Usuario y Épicas
 ### Épicas
 - EP001: Gestión de usuarios
@@ -151,6 +151,24 @@ La aplicación backend expuesta por el puerto 9080
 - Los Pull Requests serán revisados.
 - Se deben aprobar los cambios antes de ser fusionados en la rama principal.
 - Se pueden solicitar cambios adicionales si es necesario.
+## Plan a Futuro / Roadmap Backend
+
+Estas son las funcionalidades que planeamos implementar en el backend de Capacitanet:
+
+### Historias de Usuario pendientes
+
+- [ ] **HU005:** Como usuario del portal, quiero recibir una insignia digital al completar un curso para reconocer y visualizar mis logros en el perfil.
+- [ ] **HU006:** Como usuario del portal, quiero que cada curso esté dividido en capítulos para avanzar de forma estructurada y marcar mi progreso por secciones.
+- [ ] **HU007:** Como usuario del portal, quiero recibir notificaciones (correo o alerta en el sistema) cuando haya un nuevo curso disponible para mantenerme informado de las capacitaciones.
+
+### Funcionalidades adicionales a futuro
+
+- [ ] Al finalizar un curso, generar y registrar automáticamente una **insignia digital** en el perfil del usuario.
+- [ ] Consultar el **historial de formación y logros** en el perfil de cada usuario.
+- [ ] Configurar las **notificaciones** para recibir alertas sobre nuevos cursos o actualizaciones.
+- [ ] Optimización de la API para soporte de **alta concurrencia y escalabilidad**.
+- [ ] Registro de métricas y logs para monitoreo de uso y desempeño del backend.
+
 ## Contacto
 - Nombre: Katherin Saenz
 - Email: ktherin2310@gmail.com
