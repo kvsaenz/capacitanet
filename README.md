@@ -1,7 +1,6 @@
+# Capacitanet - Backend
+* [Tabla de contenido Capacitanet - Backend](#capacitanet)
 <!-- TOC -->
-
-* [Capacitanet - Backend](#capacitanet---backend)
-* [CapacitaNet](#capacitanet)
   * [Descripción del proyecto](#descripción-del-proyecto)
     * [Contexto](#contexto)
     * [Objetivo general](#objetivo-general)
@@ -34,8 +33,8 @@
   * [Contacto](#contacto)
 <!-- TOC -->
 
-# CapacitaNet
 
+# CapacitaNet
 ## Descripción del proyecto
 ### Contexto
 Es una plataforma interna que permite a los colaboradores acceder, gestionar y registrar capacitaciones técnicas organizadas por módulos, con un sistema de seguimiento de progreso y generación automática de insignias digitales como reconocimiento.
