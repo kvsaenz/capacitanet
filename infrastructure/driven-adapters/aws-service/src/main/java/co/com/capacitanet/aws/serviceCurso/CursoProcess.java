@@ -96,9 +96,7 @@ public class CursoProcess implements CursoRepository {
                             cursos.add(curso);
                         }
                     }
-
                 }
-
             } catch (Exception e) {
                 logger.error("Error al convertir el JSON a Curso: {}", e.getMessage());
                 return ResponseApp.builder().status(500).message("Error al convertir el JSON a Curso").build();

@@ -306,8 +306,9 @@ public class UsersProcess implements UsuarioRepository {
             }
         } catch (Exception e) {
             logger.error("Error al suscribir el curso: {}", e.getMessage());
+            return ResponseApp.builder().status(500).message("Accion no permitida").build();
         }
-        return ResponseApp.builder().status(500).message("Accion no permitida").build();
+
     }
 
     /**
@@ -322,6 +323,10 @@ public class UsersProcess implements UsuarioRepository {
         try {
             boolean update = false;
             Usuario user = getUsuarioPorId(userId);
+            if (user == null) {
+                logger.warn("Usuario no encontrado al intentar ver módulo: {}", userId);
+                return ResponseApp.builder().status(404).message("Usuario no encontrado").build();
+            }
             for (Curso curso : user.getCursos()) {
                 if (curso.getCursoId().equals(verModulo.getCursoId())) {
                     for (Recurso rec : curso.getRecursos()) {
@@ -373,13 +378,13 @@ public class UsersProcess implements UsuarioRepository {
             if (response.hasItem()) {
                 String json = response.item().get(PERFIL).s();
                 try {
-                    return new ObjectMapper().readValue(json, Usuario.class);
+                    return mapper.readValue(json, Usuario.class);
                 } catch (Exception e) {
-                    logger.error("Error al convertir el JSON a Curso: {}", e.getMessage());
+                    logger.error("Error al convertir el JSON a Usuario: {}", e.getMessage());
                 }
             }
         } catch (Exception e) {
-            logger.error("Error al obtener el usuario por ID");
+            logger.error("Error al obtener el usuario por ID: {}", e.getMessage(), e);
         }
         return null;
     }
