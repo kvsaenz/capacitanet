@@ -1,6 +1,7 @@
 <!-- TOC -->
-# Capacitanet - Backend
-* [Tabla de contenido Capacitanet - Backend](#capacitanet)
+
+* [Capacitanet - Backend](#capacitanet---backend)
+* [CapacitaNet](#capacitanet)
   * [Descripción del proyecto](#descripción-del-proyecto)
     * [Contexto](#contexto)
     * [Objetivo general](#objetivo-general)
@@ -14,20 +15,22 @@
   * [Historias de Usuario y Épicas](#historias-de-usuario-y-épicas)
     * [Épicas](#épicas)
     * [Historias de Usuario](#historias-de-usuario)
+        * [Funcionalidades actuales](#funcionalidades-actuales)
+        * [Próximos pasos (en desarrollo / backlog)](#próximos-pasos-en-desarrollo--backlog)
   * [Instalación y Configuración](#instalación-y-configuración)
     * [Requisitos previos (lenguaje, frameworks, librerías)](#requisitos-previos-lenguaje-frameworks-librerías)
+        * [Herramientas y dependencias](#herramientas-y-dependencias)
+        * [Desarrollo y control de versiones](#desarrollo-y-control-de-versiones)
+        * [Bases de datos y almacenamiento](#bases-de-datos-y-almacenamiento)
+        * [Seguridad e infraestructura en AWS](#seguridad-e-infraestructura-en-aws)
     * [Clonar el repositorio](#clonar-el-repositorio)
-    * [Pasos de instalación](#pasos-de-instalación)
     * [Configuración inicial](#configuración-inicial)
-    * [Comandos para ejecutar la aplicación](#comandos-para-ejecutar-la-aplicación)
   * [Uso de la Aplicación](#uso-de-la-aplicación)
     * [Instrucciones para el usuario final](#instrucciones-para-el-usuario-final)
-    * [Capturas de pantalla o ejemplos de uso](#capturas-de-pantalla-o-ejemplos-de-uso)
   * [Contribución](#contribución)
     * [Guía para contribuir al proyecto](#guía-para-contribuir-al-proyecto)
     * [Normas de codificación](#normas-de-codificación)
     * [Proceso de revisión y aceptación de cambios](#proceso-de-revisión-y-aceptación-de-cambios)
-  * [Licencia](#licencia)
   * [Contacto](#contacto)
 <!-- TOC -->
 
