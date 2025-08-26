@@ -15,7 +15,7 @@ public class AuthService {
 
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
-
+    private static final long EXPIRATION_TIME_MS = 2L * 60 * 60 * 1000; // 2 hours
 
     /**
      * Constructor de la clase AuthService.
@@ -37,7 +37,7 @@ public class AuthService {
         return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 600_000)) // 1h
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME_MS))
                 .sign(this.algorithm);
     }
 
